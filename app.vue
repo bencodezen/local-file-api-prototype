@@ -5,7 +5,8 @@ const newMember = ref('')
 
 async function addMember() {
   crew.value.push(newMember.value)
-  await createFile(newMember.value)
+  const fileHandle = await createFile(newMember.value)
+  await writeFile(fileHandle, JSON.stringify({ name: newMember.value }))
   newMember.value = ''
 }
 
@@ -16,6 +17,12 @@ async function createFile(memberName) {
   )
 
   return newFileHandle
+}
+
+async function writeFile(fileHandle, contents) {
+  const writable = await fileHandle.createWritable()
+  await writable.write(contents)
+  await writable.close()
 }
 
 async function getDirHandle() {
