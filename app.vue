@@ -10,6 +10,15 @@ async function addMember() {
   newMember.value = ''
 }
 
+async function deleteMember(member) {
+  crew.value = crew.value.filter(m => m !== member)
+  await directoryHandle.value.removeEntry(`${member}.json`)
+}
+
+// TODO: Read files from directory and populate data
+
+// TODO: Update member info
+
 async function createFile(memberName) {
   const newFileHandle = await directoryHandle.value.getFileHandle(
     `${memberName}.json`,
@@ -38,7 +47,7 @@ async function getDirHandle() {
 
     <ul>
       <li v-for="(member, index) in crew" :key="`${member}-${index}`">
-        {{ member }}
+        {{ member }} - <button @click="deleteMember(member)">🗑️ Delete</button>
       </li>
     </ul>
 
