@@ -16,6 +16,22 @@ async function deleteMember(member) {
 }
 
 // TODO: Read files from directory and populate data
+async function readFiles() {
+  const promises = []
+
+  for await (const entry of directoryHandle.value.values()) {
+    if (entry.kind !== 'file') {
+      continue
+    }
+    promises.push(
+      entry.getFile().then(file => {
+        return file.text()
+      })
+    )
+  }
+
+  return await Promise.all(promises)
+}
 
 // TODO: Update member info
 
@@ -36,7 +52,13 @@ async function writeFile(fileHandle, contents) {
 
 async function getDirHandle() {
   directoryHandle.value = await window.showDirectoryPicker()
-  console.log(dirHandle.value)
+  // Read each file's content
+  const files = await readFiles()
+  // Push it into the app's data
+  files.forEach(file => {
+    const { name } = JSON.parse(file)
+    crew.value.push(name)
+  })
 }
 </script>
 
