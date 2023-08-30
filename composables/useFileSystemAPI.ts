@@ -14,6 +14,15 @@ export const useFileSystemAPI = () => {
     directoryHandle.value = await window.showDirectoryPicker()
   }
 
+  async function readFile(memberName: string) {
+    const fileHandle = await directoryHandle.value.getFileHandle(
+      `${memberName}.json`
+    )
+    return fileHandle.getFile().then(file => {
+      return file.text()
+    })
+  }
+
   async function readFiles() {
     const promises = []
 
@@ -41,6 +50,7 @@ export const useFileSystemAPI = () => {
     directoryHandle,
     createFile,
     getDirectoryHandle,
+    readFile,
     readFiles,
     writeFile
   }

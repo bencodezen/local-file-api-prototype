@@ -1,8 +1,13 @@
 <script setup>
 import { useFileSystemAPI } from '../composables/useFileSystemAPI'
 
-const { directoryHandle, getDirectoryHandle, readFiles, writeFile } =
-  useFileSystemAPI()
+const {
+  createFile,
+  directoryHandle,
+  getDirectoryHandle,
+  readFiles,
+  writeFile
+} = useFileSystemAPI()
 
 const crew = ref([])
 const newMember = ref('')
