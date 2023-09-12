@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { getDirectoryHandle, readFile } = useFileSystemAPI()
+const { readFile } = useFileSystemAPI()
 
 const route = useRoute()
 
@@ -7,7 +7,6 @@ const memberName = computed(() => route.params.member)
 const memberInfo = ref({})
 
 onMounted(async () => {
-  await getDirectoryHandle()
   const details = await readFile(memberName.value)
   memberInfo.value = {
     ...JSON.parse(details)

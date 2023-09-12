@@ -1,3 +1,5 @@
+import { get, set } from 'idb-keyval'
+
 export const useFileSystemAPI = () => {
   const directoryHandle = ref(null)
 
@@ -12,12 +14,16 @@ export const useFileSystemAPI = () => {
 
   async function getDirectoryHandle() {
     directoryHandle.value = await window.showDirectoryPicker()
+    set('directoryHandle', directoryHandle.value)
   }
 
   async function readFile(memberName: string) {
-    const fileHandle = await directoryHandle.value.getFileHandle(
-      `${memberName}.json`
-    )
+    // const fileHandle = await directoryHandle.value.getFileHandle(
+    //   `${memberName}.json`
+    // )
+    const storedHandle = await get('directoryHandle')
+    const fileHandle = await storedHandle.getFileHandle(`${memberName}.json`)
+
     return fileHandle.getFile().then(file => {
       return file.text()
     })
