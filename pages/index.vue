@@ -2,6 +2,7 @@
 import { useFileSystemAPI } from '../composables/useFileSystemAPI'
 
 const {
+  checkPermission,
   createFile,
   directoryHandle,
   getDirectoryHandle,
@@ -36,6 +37,17 @@ async function selectDirectory() {
     crew.value.push(name)
   })
 }
+
+onMounted(async () => {
+  await checkPermission()
+  // Read each file's content
+  const files = await readFiles()
+  // Push it into the app's data
+  files.forEach(file => {
+    const { name } = JSON.parse(file)
+    crew.value.push(name)
+  })
+})
 </script>
 
 <template>

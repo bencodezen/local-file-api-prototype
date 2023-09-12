@@ -3,6 +3,16 @@ import { get, set } from 'idb-keyval'
 export const useFileSystemAPI = () => {
   const directoryHandle = ref(null)
 
+  async function checkPermission() {
+    const hasDirectoryHandle = await get('directoryHandle')
+
+    if (hasDirectoryHandle) {
+      directoryHandle.value = hasDirectoryHandle
+    } else {
+      getDirectoryHandle()
+    }
+  }
+
   async function createFile(memberName) {
     const newFileHandle = await directoryHandle.value.getFileHandle(
       `${memberName}.json`,
@@ -54,6 +64,7 @@ export const useFileSystemAPI = () => {
 
   return {
     directoryHandle,
+    checkPermission,
     createFile,
     getDirectoryHandle,
     readFile,
