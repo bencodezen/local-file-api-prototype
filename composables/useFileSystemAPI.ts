@@ -70,6 +70,7 @@ export const useFileSystemAPI = () => {
     checkPermission,
     createFile,
     getDirectoryHandle,
+    getFileHandle,
     readFile,
     readFiles,
     writeFile
