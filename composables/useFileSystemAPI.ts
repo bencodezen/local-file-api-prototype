@@ -27,12 +27,15 @@ export const useFileSystemAPI = () => {
     set('directoryHandle', directoryHandle.value)
   }
 
-  async function readFile(memberName: string) {
-    // const fileHandle = await directoryHandle.value.getFileHandle(
-    //   `${memberName}.json`
-    // )
+  async function getFileHandle(filename: string) {
     const storedHandle = await get('directoryHandle')
-    const fileHandle = await storedHandle.getFileHandle(`${memberName}.json`)
+    const fileHandle = await storedHandle.getFileHandle(filename)
+
+    return fileHandle
+  }
+
+  async function readFile(memberName: string) {
+    const fileHandle = await getFileHandle(`${memberName}.json`)
 
     return fileHandle.getFile().then(file => {
       return file.text()
