@@ -16,9 +16,8 @@ async function writeMemberFile(memberName) {
 }
 
 async function addSpecialMove() {
-  if (!memberInfo.value.specialMoves) {
-    memberInfo.value.specialMoves = []
-  }
+  // This syntax is called nullish coalescing assignment
+  memberInfo.value.specialMoves ??= []
 
   memberInfo.value.specialMoves.push(newSpecialMove.value)
 
