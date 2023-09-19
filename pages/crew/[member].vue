@@ -6,16 +6,33 @@ const { getFileHandle, writeFile } = useFileSystemAPI()
 
 const memberName = computed(() => route.params.member)
 const memberInfo = ref({})
+const newSpecialMove = ref('')
+
+async function writeMemberFile(memberName) {
+  await writeFile(
+    await getFileHandle(`${memberName}.json`),
+    JSON.stringify(memberInfo.value)
+  )
+}
+
+async function addSpecialMove() {
+  if (!memberInfo.value.specialMoves) {
+    memberInfo.value.specialMoves = []
+  }
+
+  memberInfo.value.specialMoves.push(newSpecialMove.value)
+
+  await writeMemberFile(memberName.value)
+
+  newSpecialMove.value = ''
+}
 
 async function deleteSpecialMove(move) {
   memberInfo.value.specialMoves = memberInfo.value.specialMoves.filter(
     m => m !== move
   )
 
-  await writeFile(
-    await getFileHandle(`${memberName.value}.json`),
-    JSON.stringify(memberInfo.value)
-  )
+  await writeMemberFile(memberName.value)
 }
 
 onMounted(async () => {
@@ -29,6 +46,7 @@ onMounted(async () => {
 <template>
   <h1>{{ memberName }} Page</h1>
   <h2>Special Moves</h2>
+  <input v-model="newSpecialMove" type="text" @keyup.enter="addSpecialMove" />
   <ul v-if="memberInfo.specialMoves">
     <li
       v-for="(move, index) in memberInfo.specialMoves"
